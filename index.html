@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Game</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#"><img class="logo" src="./images/logo.png" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <form class="nav-form form-inline">
+                    <li class="nav-item">
+                        <a href="signup.html">
+                            <button class="btn btn-sm btn-outline-secondary" type="button">SignUp</button>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="login.html">
+                            <button class="btn btn-sm btn-outline-secondary" type="button">Login</button>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">
+                            <button class="btn btn-outline-warning" type="button">Go Premium</button>
+                        </a>
+                    </li>
+                </form>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container landing">
+        <div id="login-signup-buttons">
+            <h1 class="text-dark">Welcome</h1>
+            <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae modi non debitis dolor, ad quae in. <br> cupiditate labore iste incidunt distinctio et veritatis tenetur vitae, pariatur vel officiis magnam?</p>
+            <button id="login-button"><a style="text-decoration: none;" class="text-dark" href="login.html">login</a></button>
+            <button id="start-quiz-button" onclick="scrollToQuiz()">Start Quiz</button>
+        </div>
+
+        <div id="quiz-container" class="bg-white p-4 rounded shadow">
+            <h1 class="mb-4">Quiz Game</h1>
+            <div id="question-container" class="mb-4"></div>
+            <div id="answer-buttons" class="btn-container"></div>
+            <button id="next-button" class="btn btn-primary" style="display: none;">Next</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [{
+        question: 'What is two plus two?',
+                answers: [
+                    { text: 'four', correct: true },
+                    { text: 'five', correct: false },
+                    { text: 'three', correct: false },
+                    { text: 'seven', correct: false }
+                ]
+            },
+            {
+                question: 'What is the capital of France?',
+                answers: [
+                    { text: 'Paris', correct: true },
+                    { text: 'Berlin', correct: false },
+                    { text: 'Madrid', correct: false },
+                    { text: 'Rome', correct: false }
+                ]
+            },
+            {
+                question: 'What is the national vegii of Pakistan?',
+                answers: [
+                    { text: 'carrot', correct: false },
+                    { text: 'lady finger', correct: true },
+                    { text: 'onion', correct: false },
+                    { text: 'tomato', correct: false }
+                ]
+            },
+            {
+                question: 'What is the 4 times 8?',
+                answers: [
+                    { text: '32', correct: true },
+                    { text: '36', correct: false },
+                    { text: '38', correct: false },
+                    { text: '40', correct: false }
+                ]
+            },
+            {
+                question: 'What is quaid\'s name?',
+                answers: [
+                    { text: 'Iqbal', correct: false },
+                    { text: 'Ahmed khan', correct: false },
+                    { text: 'MOhammad ALi', correct: true },
+                    { text: 'Rome', correct: false }
+                ]
+            },
+            {
+                question: 'What does plant exhale at day?',
+                answers: [
+                    { text: 'carbon', correct: false},
+                    { text: 'Water', correct: false },
+                    { text: 'oxygen', correct: true },
+                    { text: 'nitrogen', correct: false }
+                ]
+            },
+            {
+                question: 'What is called gate of islam?',
+                answers: [
+                    { text: 'Sindh', correct: true },
+                    { text: 'Panjab', correct: false },
+                    { text: 'Madrid', correct: false },
+                    { text: 'Rome', correct: false }
+                ]
+            },
+            {
+                question: 'Who won latest world cup?',
+                answers: [
+                    { text: 'pakistan', correct: false },
+                    { text: 'Berlin', correct: false },
+                    { text: 'Madrid', correct: false },
+                    { text: 'Australia', correct: true }
+                ]
+            },
+            {
+                question: 'What color is sky at night?',
+                answers: [
+                    { text: 'Black', correct: true },
+                    { text: 'Grey', correct: false },
+                    { text: 'orange', correct: false },
+                    { text: 'Sky blue', correct: false }
+                ]
+            },
+            {
+                question: 'Which planet is known as the Red Planet?',
+                answers: [
+                    { text: 'Earth', correct: false },
+                    { text: 'Mars', correct: true },
+                    { text: 'Venus', correct: false },
+                    { text: 'Jupiter', correct: false }
+                ]
+            },
+            {
+                question: 'Who wrote "Romeo and Juliet"?',
+                answers: [
+                    { text: 'Charles Dickens', correct: false },
+                    { text: 'William Shakespeare', correct: true },
+                    { text: 'Jane Austen', correct: false },
+                    { text: 'Leo Tolstoy', correct: false }
+                ]
+            }
+        
+        ]
+
+    let currentQuestionIndex = 0;
+
+    const questionContainer = document.getElementById('question-container');
+    const answerButtons = document.getElementById('answer-buttons');
+    const nextButton = document.getElementById('next-button');
+    const quizContainer = document.getElementById('quiz-container');
+    const loginSignupButtons = document.getElementById('login-signup-buttons');
+
+    nextButton.addEventListener('click', nextQuestion);
+
+    function startGame() {
+        currentQuestionIndex = 0;
+        nextButton.style.display = 'none';
+        showQuestion(questions[currentQuestionIndex]);
+        quizContainer.style.display = 'none';
+        loginSignupButtons.style.display = 'block';
+    }
+
+    function showQuestion(question) {
+        questionContainer.innerHTML = question.question;
+        answerButtons.innerHTML = '';
+        question.answers.forEach(answer => {
+            const button = document.createElement('button');
+            button.innerHTML = answer.text;
+            button.classList.add('btn');
+            button.addEventListener('click', () => selectAnswer(answer, button));
+            answerButtons.appendChild(button);
+        });
+    }
+
+    function selectAnswer(answer, button) {
+        const correct = answer.correct;
+        if (correct) {
+            nextButton.style.display = 'block';
+        } else {
+            alert('Incorrect answer!'); // Display alert on incorrect answer
+            disableButton(button);
+        }
+    }
+
+    function disableButton(button) {
+        button.disabled = true;
+    }
+
+    function nextQuestion() {
+        nextButton.style.display = 'none';
+        currentQuestionIndex++;
+
+        if (currentQuestionIndex < questions.length) {
+            showQuestion(questions[currentQuestionIndex]);
+            enableButtons();
+        } else {
+            quizContainer.innerHTML = 'Quiz complete! 🎉';
+            answerButtons.innerHTML = '';
+        }
+    }
+
+    function enableButtons() {
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.disabled = false;
+        });
+    }
+
+    function scrollToQuiz() {
+        // Scroll to the quiz container
+        quizContainer.style.display = 'block';
+        loginSignupButtons.style.display = 'none';
+        quizContainer.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    startGame();
+</script>
+
+</body>
+
+</html>
